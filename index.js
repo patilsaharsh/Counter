@@ -25,6 +25,7 @@ app.get("/calculate", (req, res) => {
     
   }else{
     res.send(`Invalid request`);
+    console.log(req.headers)
   }
   
   
