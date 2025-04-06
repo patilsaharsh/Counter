@@ -12,6 +12,25 @@ app.get("/", (req, res) => {
   console.log(`${currentTime}`)
 });
 
+
+app.get("/calculate", (req, res) => {
+  let num1 = req.header.num1
+  let num2 = req.header.num2
+  let operation = req.header.operation
+  let Result = 0
+
+  if(operation == 'Add'){
+    Result = num1 + num2
+  res.send(`${Result}`);
+    
+  }else{
+    res.send(`Invalid request`);
+  }
+  
+  
+  console.log(`${currentTime}`)
+});
+
 app.listen(port, () => {
   console.log(`Server running at http://localhost:${port}`);
 });
