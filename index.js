@@ -31,7 +31,7 @@ app.get("/calculate", (req, res) => {
     Result = num1 * num2;
     res.send(`${Result}`);
   }
-  if (operation == "Divison") {
+  if (operation == "Division") {
     Result = num1 / num2;
     res.send(`${Result}`);
   } else {
