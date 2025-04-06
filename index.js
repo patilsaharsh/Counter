@@ -14,9 +14,9 @@ app.get("/", (req, res) => {
 
 
 app.get("/calculate", (req, res) => {
-  let num1 = req.header.num1
-  let num2 = req.header.num2
-  let operation = req.header.operation
+  let num1 = Number(req.headers.num1)
+  let num2 = Number(req.headers.num2)
+  let operation = req.headers.operation
   let Result = 0
 
   if(operation == 'Add'){
