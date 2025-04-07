@@ -4,27 +4,32 @@ const bodyParser = require("body-parser");
 
 const app = express();
 const port = 3000;
-const TOGETHER_API_KEY = 'c0eaac49c02dae99151c61addd0ac5da53b145cafe673e5b1d128f2ad4870118'; // Replace with your real key
 
-app.use(bodyParser.json()); // Allows you to read JSON body content
+// Replace this with your real Together API key
+const TOGETHER_API_KEY = 'c0eaac49c02dae99151c61addd0ac5da53b145cafe673e5b1d128f2ad4870118';
+
+// Middleware to parse plain text input
+app.use(bodyParser.text({ type: 'text/plain' }));
 
 // Counter variable that increases with every request
 let requestCount = 0;
 
+// ➤ COUNTER ROUTE
 app.get("/counter", (req, res) => {
   requestCount++;
   res.send(`${requestCount}`);
   console.log(`Counter hit at: ${new Date().toISOString()}`);
 });
 
-// ChatGPT-style endpoint with token limit
+// ➤ CHAT ROUTE (plain text input)
 app.post("/chatgpt", async (req, res) => {
   requestCount++;
-  const userMessage = req.body.message;
-  const maxTokens = req.body.max_tokens || 25; // default to 60 tokens if not provided
 
-  if (!userMessage) {
-    return res.status(400).json({ error: "Missing 'message' in request body." });
+  const userMessage = req.body;
+  const maxTokens = Number(req.headers["max-tokens"]) || 25;
+
+  if (!userMessage || typeof userMessage !== "string") {
+    return res.status(400).json({ error: "Request body must be plain text." });
   }
 
   try {
@@ -57,9 +62,10 @@ app.post("/chatgpt", async (req, res) => {
   console.log(`ChatGPT hit at: ${new Date().toISOString()}`);
 });
 
-// Calculator route
+// ➤ CALCULATOR ROUTE
 app.get("/calculate", (req, res) => {
   requestCount++;
+
   const num1 = Number(req.headers.num1);
   const num2 = Number(req.headers.num2);
   const operation = req.headers.operation;
@@ -76,7 +82,7 @@ app.get("/calculate", (req, res) => {
       result = num1 * num2;
       break;
     case "Division":
-      result = num1 / num2;
+      result = num2 !== 0 ? num1 / num2 : "Cannot divide by zero";
       break;
     default:
       return res.status(400).send("Invalid operation");
@@ -86,6 +92,7 @@ app.get("/calculate", (req, res) => {
   console.log(`Calculation hit at: ${new Date().toISOString()}`);
 });
 
+// ➤ START SERVER
 app.listen(port, () => {
   console.log(`🟢 Server running at http://localhost:${port}`);
 });
