@@ -25,7 +25,7 @@ app.get("/counter", (req, res) => {
 app.post("/chatgpt", async (req, res) => {
   requestCount++;
 
-  const userMessage = req.body;
+  const userMessage = req.body + "Tell answer in max 25 tokens";
   const maxTokens = Number(req.headers["max-tokens"]) || 25;
 
   if (!userMessage || typeof userMessage !== "string") {
